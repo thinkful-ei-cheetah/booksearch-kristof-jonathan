@@ -7,21 +7,15 @@ const DisplayItem = ({book}) => (
         <img src={book.image} alt={`The cover of ${book.title}`}/>
       </div>
     <div className="right-panel">
-      <div className="book-title">
-        {book.title}
-      </div>
-      <div className="book-authors">
-        {book.authors ? book.authors.map((author)=> author): ''}
-      </div>
-      <div className="book-price">
-        {book.price}
-      </div>
-      <div className="book-description">
-        {book.description}
-      </div>
-      <div className="book-preview">
+
+        <h2>{book.title}</h2>
+        <h3>{book.authors ? book.authors.map((author)=> author+ " "): ''}</h3>
+        <h4>{book.price ? book.price +'USD' :''}</h4>
+        <h4>{book.description}</h4>
+        <br/>
+
         <a href={book.preview}>LINK</a>
-      </div>
+
     </div>
 
   </div>

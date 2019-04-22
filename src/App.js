@@ -47,9 +47,9 @@ class App extends Component {
           books: resJson.items.map(book=>({        
             authors: book.volumeInfo.authors,
             title: book.volumeInfo.title,
-            price: book.hasOwnProperty('saleInfo.retailPrice.amount') ? book.saleInfo.retailPrice.amount : '',
+            price: ('retailPrice' in book.saleInfo) ? book.saleInfo.retailPrice.amount : '',
             preview: book.volumeInfo.previewLink,
-            description: book.volumeInfo.description,
+            description: book.volumeInfo.description ? book.volumeInfo.description.substring(0,100) + '...' : '',
             image: book.volumeInfo.imageLinks.thumbnail
           })
           )

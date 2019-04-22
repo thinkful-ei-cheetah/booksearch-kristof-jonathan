@@ -1,13 +1,21 @@
+.display-item{
+  display: flex;
+  height: 250px;
+  border-bottom: 1px solid grey;
+  margin-bottom: 20px
+}
+
+
 .book-image{
-  float: left;
+
   }
 
 .right-panel {
-  clear: right;
+  text-align: left;
+  margin-left: 50px
 }
 
-.display-item{
-  clear: both;
-  margin-bottom: 50px;
-
+h2, h4, h3{
+  padding: 0px;
+  margin: 0px;
 }
