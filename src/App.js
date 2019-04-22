@@ -8,26 +8,44 @@ class App extends Component {
     books: [],
     value: "",
     filter: "",
-    type:""
+    type:"",
+    error: null
   }
 
-  handleSearch(e){
+
+  handleSearch = async (e) => {
     e.preventDefault();
 
-    fetch(`https://www.googleapis.com/books/v1/volumes?q=${this.state.query}&filter=${this.state.filter}&printType=${this.state.type}&key=${process.env.REACT_APP_G_BOOKS_API}
+    const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${this.state.value}&filter=${this.state.filter}&printType=${this.state.type}&key=${process.env.REACT_APP_G_BOOKS_API}
     `)
-    .then(res => res.json())
-    .then(res=> this.setState({
-      books: res.items.map(book=>({        
-        authors: book.volumeInfo.authors,
-        title: book.volumeInfo.title,
-        price: book.saleInfo.saleability === 'FREE' ? "" : book.saleInfo.retailPrice.amount,
-        preview: book.volumeInfo.previewLink,
-        image: book.volumeInfo.imageLinks.thumbnail
-      })
-      )
-    }))
+
+    if (res.ok !== 'ok'){
+      this.errorHandle(res)
+    } else{
+      const resJson = await res.json()
+
+      this.setState({
+        books: res.items.map(book=>({        
+          authors: book.volumeInfo.authors,
+          title: book.volumeInfo.title,
+          price: book.saleInfo.saleability === 'FREE' ? "" : book.saleInfo.retailPrice.amount,
+          preview: book.volumeInfo.previewLink,
+          image: book.volumeInfo.imageLinks.thumbnail
+        })
+        )
+      })    
+    }
   }
+
+  errorHandle = (response) => {
+    const error = {};
+    
+    if (response.headers.get('content') !=='application/json'){
+      error.message = response.text()
+    }
+
+  }
+  
 
   handleSearchEntry = (e) =>{
     console.log('imh')
