@@ -3,10 +3,11 @@ form{
 }
 
 .search-container{
-  background-color:rgb(100,100,100);
+  background-color:rgb(171,171,171);
   padding: 10px 0px;
 }
 
 .search-query-label{
   margin-right: 10px;
+  font-weight: 600;
 }
