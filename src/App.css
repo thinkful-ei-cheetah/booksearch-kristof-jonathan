@@ -3,3 +3,16 @@
   max-width: 900px;
   margin: 0 auto;
 }
+
+h1{
+  font-size: 48px;
+  color: white;
+  text-align:center;
+  vertical-align: middle;
+  line-height: 150px;
+}
+
+header{
+  background-color: black;
+  height: 150px;
+}

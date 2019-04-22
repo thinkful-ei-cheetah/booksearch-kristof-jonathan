@@ -39,7 +39,14 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-      <SearchSection handleSearch={this.handleSearch} searchEntry={this.handleSearchEntry} searchValue={this.state.value} typeSelection={this.handleTypeSelection} filterSelection={this.handlefilterSelection} />
+        <header>
+          <h1>Google Book Search</h1>
+        </header>
+        <SearchSection 
+          handleSearch={this.handleSearch} 
+          searchEntry={this.handleSearchEntry} searchValue={this.state.value} 
+          typeSelection={this.handleTypeSelection} filterSelection={this.handlefilterSelection} 
+        />
 
 
       </div>
