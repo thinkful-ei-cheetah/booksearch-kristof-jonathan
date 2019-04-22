@@ -5,11 +5,14 @@ const SearchSection = ({handleSearch, searchEntry, typeSelection, filterSelectio
   <form onSubmit={handleSearch}>
     
     <div className="search-container">
-    <label className="search-query-label" htmlFor="search-query">Search:</label>
+      <label className="search-query-label" htmlFor="search-query">Search:</label>
       <input type="text" name="search-query" value={searchValue} id="search-query" onChange={searchEntry}/>
+      <input type="submit" value="Search"/>
+    </div>
+    <div className="options">
       <br />
+      
       <label className="display-type-select" htmlFor="display-select">Print Type:</label>
-
       <select id="display-select" name="book-select" onChange={handleSelect}>
         <option value="all">All</option>
         <option value="books">Books</option>
@@ -22,8 +25,9 @@ const SearchSection = ({handleSearch, searchEntry, typeSelection, filterSelectio
         <option value="free-ebooks">Only Free</option>
       </select>
       <br />
-      <input type="submit" value="Search"/>
-    </div>
+      </div>
+      
+    
   </form>
 );
 

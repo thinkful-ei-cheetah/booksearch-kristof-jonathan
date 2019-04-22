@@ -1,15 +1,13 @@
 .book-image{
-        float: left;
+  float: left;
   }
 
 .right-panel {
+  clear: right;
+}
 
-    clear: right;
-
-  }
-  
-.display-item
-{
-clear: both;
+.display-item{
+  clear: both;
+  margin-bottom: 50px;
 
 }

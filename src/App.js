@@ -16,33 +16,46 @@ class App extends Component {
 
   handleSearch = async (e) => {
     e.preventDefault();
-    if (!this.state.value)
-      return;
+    if (this.state.value.trim()===""){
+      this.setState({error: 'Please enter a topic to search for.',
+      books:[],
+    })
+    } else {
+      let filter ='';
+      if (this.state['display-select'])
+        filter = `&filter=${this.state['display-select']}`;
 
+      const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${this.state.value}${filter}&printType=${this.state['book-select']}&key=${process.env.REACT_APP_G_BOOKS_API}
+      `)
 
-    let filter ='';
-    if (this.state['display-select'])
-      filter = `&filter=${this.state['display-select']}`;
-
-    const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${this.state.value}${filter}&printType=${this.state['book-select']}&key=${process.env.REACT_APP_G_BOOKS_API}
-    `)
-
-      const resJson = await res.json()
-
-      if (resJson.totalItems === 0)
-        return;
-
-      this.setState({
-        books: resJson.items.map(book=>({        
-          authors: book.volumeInfo.authors,
-          title: book.volumeInfo.title,
-          price: book.hasOwnProperty('saleInfo.retailPrice.amount') ? book.saleInfo.retailPrice.amount : '',
-          preview: book.volumeInfo.previewLink,
-          description: book.volumeInfo.description,
-          image: book.volumeInfo.imageLinks.thumbnail
+      if (!res.ok){
+        this.setState({
+          error: "Problem loading data from server. Please try again later."
         })
-        )
-      })   
+        return;
+      }
+        const resJson = await res.json()
+
+        if (resJson.totalItems === 0){
+          this.setState({
+            books:[],
+            error: 'No Books Found'
+          })
+        } else {
+        this.setState({
+          error: null,
+          books: resJson.items.map(book=>({        
+            authors: book.volumeInfo.authors,
+            title: book.volumeInfo.title,
+            price: book.hasOwnProperty('saleInfo.retailPrice.amount') ? book.saleInfo.retailPrice.amount : '',
+            preview: book.volumeInfo.previewLink,
+            description: book.volumeInfo.description,
+            image: book.volumeInfo.imageLinks.thumbnail
+          })
+          )
+        })
+      }   
+    }
   }
 
   errorHandle = (response) => {
@@ -83,6 +96,7 @@ class App extends Component {
           handleSelect = {this.handleSelectEntry}
         />
        { this.state.books ? this.generateDisplayItems(this.state.books) : '' }
+       { this.state.error ? this.state.error : '' }
       </div>
     );
   }

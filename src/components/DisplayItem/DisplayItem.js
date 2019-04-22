@@ -4,7 +4,7 @@ import './DisplayItem.css'
 const DisplayItem = ({book}) => (
   <div className="display-item">
       <div className="book-image">
-        <img src={book.image} />
+        <img src={book.image} alt={`The cover of ${book.title}`}/>
       </div>
     <div className="right-panel">
       <div className="book-title">

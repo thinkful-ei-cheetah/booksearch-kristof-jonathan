@@ -1,5 +1,6 @@
 form{
   margin: 0 auto;
+  margin-bottom: 40px;
 }
 
 .search-container{
@@ -11,3 +12,8 @@ form{
   margin-right: 10px;
   font-weight: 600;
 }
+
+.options{
+  background-color: rgb(222,222,222)
+}
+
