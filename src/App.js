@@ -1,40 +1,48 @@
 import React, { Component } from 'react';
 import './App.css';
 import SearchSection from './components/SearchSection/SearchSection'
+import DisplayItem from './components/DisplayItem/DisplayItem'
 
 class App extends Component {
 
   state = {
     books: [],
     value: "",
-    filter: "",
-    type:"",
+    'book-select': "all",
+    'display-select':"",
     error: null
   }
 
 
   handleSearch = async (e) => {
     e.preventDefault();
+    if (!this.state.value)
+      return;
 
-    const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${this.state.value}&filter=${this.state.filter}&printType=${this.state.type}&key=${process.env.REACT_APP_G_BOOKS_API}
+
+    let filter ='';
+    if (this.state['display-select'])
+      filter = `&filter=${this.state['display-select']}`;
+
+    const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${this.state.value}${filter}&printType=${this.state['book-select']}&key=${process.env.REACT_APP_G_BOOKS_API}
     `)
 
-    if (res.ok !== 'ok'){
-      this.errorHandle(res)
-    } else{
       const resJson = await res.json()
 
+      if (resJson.totalItems === 0)
+        return;
+
       this.setState({
-        books: res.items.map(book=>({        
+        books: resJson.items.map(book=>({        
           authors: book.volumeInfo.authors,
           title: book.volumeInfo.title,
-          price: book.saleInfo.saleability === 'FREE' ? "" : book.saleInfo.retailPrice.amount,
+          price: book.hasOwnProperty('saleInfo.retailPrice.amount') ? book.saleInfo.retailPrice.amount : '',
           preview: book.volumeInfo.previewLink,
+          description: book.volumeInfo.description,
           image: book.volumeInfo.imageLinks.thumbnail
         })
         )
-      })    
-    }
+      })   
   }
 
   errorHandle = (response) => {
@@ -43,16 +51,23 @@ class App extends Component {
     if (response.headers.get('content') !=='application/json'){
       error.message = response.text()
     }
-
   }
   
-
   handleSearchEntry = (e) =>{
-    console.log('imh')
     const {value} = e.target
     this.setState({value})
   }
 
+  handleSelectEntry = (e) =>{
+    const {value} = e.target
+    const {name} = e.target
+    this.setState({[name]:value})
+    this.handleSearch(e)
+  }
+
+  generateDisplayItems = (books) => {
+    return books.map((book, key) => <DisplayItem key={key} book={book}/> )
+  }
 
   render() {
     return (
@@ -63,10 +78,11 @@ class App extends Component {
         <SearchSection 
           handleSearch={this.handleSearch} 
           searchEntry={this.handleSearchEntry} searchValue={this.state.value} 
-          typeSelection={this.handleTypeSelection} filterSelection={this.handlefilterSelection} 
+          typeSelection={this.handleTypeSelection} 
+          filterSelection={this.handlefilterSelection} 
+          handleSelect = {this.handleSelectEntry}
         />
-
-
+       { this.state.books ? this.generateDisplayItems(this.state.books) : '' }
       </div>
     );
   }
